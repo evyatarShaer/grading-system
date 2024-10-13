@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { IUser } from "./studentModel";
+import { IUser } from "./userModel";
 
 export interface IClass extends Document {
     name: string, 
