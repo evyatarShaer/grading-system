@@ -1,24 +1,26 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 import { IUser } from "./userModel";
 
 export interface IClass extends Document {
     name: string, 
-    teacher: IUser['_id'],
-    students: IUser['_id'][],
+    teacher: ObjectId,
+    students: ObjectId[],
 }
 
 
 const ClassSchema: Schema = new Schema({
     name: {
         type: String, 
-        required: true
+        //required: true
     },
     teacher: {
         type: Schema.Types.ObjectId,
+        //required: true,
         ref: 'User'
     },
     students: {
         type: [Schema.Types.ObjectId],
+        default: [],
         ref: 'User'
     }
 });

@@ -2,29 +2,31 @@ import { Request, Response } from "express";
 import User from "../models/userModel";
 import { generateToken } from "../utils/auth";
 import { createUser } from "../services/userService";
+import Class from "../models/classModel";
 
-// פונקציה להרשמה של משתמש חדש
 export const register = async (req: Request, res: Response) => {
-    const { username, email, password, classId } = req.body;
+    const { username, email, password, role, classId, className } = req.body;
 
     try {
         const user = await createUser({
-            username, password
-        }, classId);
+            username, email, password, role
+        }, classId, className);
 
-        if (user.role === 'teacher') {
-            res.status(201).json({ message: "המורה נרשם בהצלחה" })
-        } else {
-            res.status(201).json({ message: "הסטודנט נרשם בהצלחה"})
+        if (classId)
+        {
+            res.status(201).json({ message: "המשתמש נוסף בהצלחה"})
         }
-
+        else
+        {
+            res.status(201).json({ message: "לא נוצר id"})
+        }
     } catch (error) {
         console.log(error);
         res.status(400).json("תקלה בהרשמה")
     }
 }
 
-// התחברות של משתמש קיים
+
 export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
@@ -35,7 +37,6 @@ export const login = async (req: Request, res: Response) => {
         return
     };
 
-    // לעדכן מתי נכנס
     user.lastLogin = new Date();
     await user.save()
 
